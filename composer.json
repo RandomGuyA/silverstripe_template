@@ -1,8 +1,8 @@
 {
-  "name": "RandomGuyA/silverstripe_template",
+  "name": "randomguya/silverstripe_template",
   "description": "Custom built SilverStripe installer with Foundation",
   "type": "silverstripe-module",
-  "homepage": "https://github.com/RandomGuyA/silverstripe_template",
+  "homepage": "https://github.com/randomguya/silverstripe_template",
   "keywords": ["silverstripe", "installer"],
   "authors": [
     {
@@ -31,5 +31,5 @@
     "phpunit/PHPUnit": "~3.7@stable"
   },
   "prefer-stable": true,
-  "minimum-stability": "stable"
+  "minimum-stability": "dev"
 }
