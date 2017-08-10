@@ -31,5 +31,5 @@
     "phpunit/PHPUnit": "~3.7@stable"
   },
   "prefer-stable": true,
-  "minimum-stability": "dev"
+  "minimum-stability": "stable"
 }

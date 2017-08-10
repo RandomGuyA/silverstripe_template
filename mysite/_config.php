@@ -13,11 +13,12 @@ $databaseConfig = array(
 	'type' => 'MySQLDatabase',
 	'server' => 'localhost',
 	'username' => 'root',
-	'password' => 'Castle10',
-	'database' => 'ss_master',
+	'password' => '',
+	'database' => '',
 	'path' => ''
 );
 
+Security::setDefaultAdmin('','');
 
 /**************************
  *       LOCALE
@@ -31,33 +32,44 @@ Translatable::set_allowed_locales(array(
     )
 );
 
-
 /**************************
  *     ERROR HANDLING
  *************************/
 
+FulltextSearchable::enable(array('SiteTree'));
 
-error_reporting(E_ALL);
+if (Director::isDev()) {
+    // Turn on all errors
+    ini_set('display_errors', 1);
+    ini_set("log_errors", 1);
+    // error_reporting(E_ERROR | E_PARSE);
+    // error_reporting(E_ALL && ~E_DEPRECATED);
+    error_reporting(E_ALL | E_STRICT);
 
-ini_set("log_errors", "On");
-ini_set("display_errors", 1);
-//Debug::log_errors_to("log/silverstripe.log");
-ini_set("log_errors", "On");
-ini_set("error_log", "log/silverstripe.log");
+    SS_Log::add_writer(new SS_LogFileWriter(dirname(__FILE__).'/errors.log'));
 
+    // Use Mailgun to send all emails while in DEV mode
+    // When in LIVE/TEST mode all emails will be sent via the default Mail class.
+    Email::set_mailer( new SmtpMailer() );
 
-if(!Director::isDev()) {
-    // log errors and warnings
-    SS_Log::add_writer(new SS_LogFileWriter('log/silverstripe-errors-warnings.log'), SS_Log::WARN, '<=');
-
-    // or just errors
-    SS_Log::add_writer(new SS_LogFileWriter('log/silverstripe-errors.log'), SS_Log::ERR);
-
-    // or notices (e.g. for Deprecation Notifications)
-    SS_Log::add_writer(new SS_LogFileWriter('log/silverstripe-errors-notices.log'), SS_Log::NOTICE);
+    // SSViewer::flush_template_cache();
+    // Email::send_all_emails_to('?@platocreative.co.nz');
 }
 
+if (Director::isTest()) {
 
+    // BasicAuth::protect_entire_site();
+
+    ini_set('display_errors', 1);
+    ini_set("log_errors", 1);
+    error_reporting(E_ALL | E_STRICT);
+
+    SS_Log::add_writer(new SS_LogFileWriter(dirname(__FILE__).'/errors.log'));
+
+    // Email::set_mailer( new SmtpMailer() );
+    //Email::send_all_emails_to('?@platocreative.co.nz');
+
+}
 
 /**************************
  *      EXTENSIONS
